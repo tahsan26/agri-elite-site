@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - voice typing (mic) for question boxes. Plain JS, no build step.
+/* AGRi Elite Arena - voice typing (mic) for question boxes. Plain JS, no build step.
    Uses the browser's built-in speech recognition (Chrome / Edge / Android / Safari). Hidden where unsupported. */
 (function(){
 if(window.__agriVoice)return;window.__agriVoice=1;

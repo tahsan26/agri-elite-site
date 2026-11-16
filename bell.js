@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - notification bell. Shows the latest public announcements (same ones sent as push alerts). */
+/* AGRi Elite Arena - notification bell. Shows the latest public announcements (same ones sent as push alerts). */
 (function(){var C=window.AGRI_CFG;if(!C||!C.url||!C.key||/^\/admin/.test(location.pathname))return;
 var K='agri-bell-seen',items=[],bell,badge,panel;
 function seen(){try{return parseInt(localStorage.getItem(K))||0}catch(e){return 0}}

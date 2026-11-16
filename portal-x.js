@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - student portal add-ons: AI mock exam, study groups + challenges, badges + certificates.
+/* AGRi Elite Arena - student portal add-ons: AI mock exam, study groups + challenges, badges + certificates.
    Loaded BEFORE the main portal script; the portal calls window.AgriPortalExt(ctx) once its helpers exist. Plain JS, no build step. */
 (function(){
 window.AgriPortalExt=function(X){
@@ -99,7 +99,7 @@ V.groups=async function(){
   $('gl').innerHTML=d.map(function(g){return'<div class="card" data-g="'+esc(g.id)+'"><div class="x-row"><b class="x-grow" style="font-size:17px">'+esc(g.name)+(g.is_owner?' <span class="x-pill">owner</span>':'')+'</b><span class="m">'+g.members+' member'+(g.members>1?'s':'')+'</span></div><div class="x-row" style="margin:8px 0"><span class="m">Code</span><span class="x-code">'+esc(g.code)+'</span><button class="btn s" data-a="copy" data-c="'+esc(g.code)+'">Copy</button><button class="btn s" data-a="share" data-c="'+esc(g.code)+'" data-n="'+esc(g.name)+'">Share</button></div>'+(g.ch_id?'<p style="margin:6px 0">🏁 <b>'+esc(g.ch_title)+'</b> <span class="x-pill">'+esc(left(g.ch_ends))+'</span></p>':'<p class="m" style="margin:6px 0">No challenge running. Showing the last 7 days.</p>')+'<div class="x-row"><button class="btn" data-a="board">Leaderboard</button>'+(g.is_owner&&!g.ch_id?'<button class="btn g" data-a="chal">Start a challenge</button>':'')+'<button class="btn s" data-a="leave">Leave</button></div><div class="x-cf"></div></div>'}).join('')}
  $('gl').onclick=async function(e){var b=e.target.closest('button[data-a]');if(!b)return;var card=b.closest('[data-g]'),gid=card.dataset.g,a=b.dataset.a;
   if(a==='copy'){copy(b.dataset.c,function(ok){b.textContent=ok?'Copied ✓':b.dataset.c})}
-  else if(a==='share'){var txt='Join my study group "'+b.dataset.n+'" on AGRi ELITE NOTES. Open the Student Portal → Groups → Join, and enter this code: '+b.dataset.c;if(navigator.share){navigator.share({title:'AGRi ELITE NOTES study group',text:txt,url:location.origin+'/portal.html'}).catch(function(){})}else copy(txt+' '+location.origin+'/portal.html',function(ok){b.textContent=ok?'Copied ✓':'Share'})}
+  else if(a==='share'){var txt='Join my study group "'+b.dataset.n+'" on AGRi Elite Arena. Open the Student Portal → Groups → Join, and enter this code: '+b.dataset.c;if(navigator.share){navigator.share({title:'AGRi Elite Arena study group',text:txt,url:location.origin+'/portal.html'}).catch(function(){})}else copy(txt+' '+location.origin+'/portal.html',function(ok){b.textContent=ok?'Copied ✓':'Share'})}
   else if(a==='board')board(gid)
   else if(a==='leave'){if(!confirm('Leave this group?'))return;var r=await sb.rpc('group_leave',{p_group:gid});if(r.error)$('gmsg').innerHTML=msg(r.error.message);$('gb').innerHTML='';load()}
   else if(a==='chal'){var cf=card.querySelector('.x-cf');cf.innerHTML='<form class="x-row" style="margin-top:10px"><input class="x-grow" name="t" placeholder="Challenge title, e.g. Ozone week" maxlength="60" minlength="3" required><select name="d"><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option></select><select name="c"><option value="">All courses</option>'+(X.st().courses||[]).map(function(c){return'<option value="'+esc(c.id)+'">'+esc(c.code)+'</option>'}).join('')+'</select><button class="btn g">Start</button></form>';
@@ -119,7 +119,7 @@ function drawCert(cv,name,b,dt,serial){
  c.lineWidth=26;c.strokeStyle=g;c.strokeRect(30,30,W-60,H-60);c.lineWidth=4;c.strokeStyle='#d9a21e';c.strokeRect(66,66,W-132,H-132);
  c.textAlign='center';c.fillStyle='#0a4a37';
  var F='"Hind Siliguri","Noto Sans Bengali","Segoe UI",system-ui,sans-serif',S='Georgia,"Times New Roman",serif';
- c.font='700 30px '+F;c.fillStyle='#0f6b4f';c.fillText('AGRi ELITE NOTES',W/2,150);
+ c.font='700 30px '+F;c.fillStyle='#0f6b4f';c.fillText('AGRi Elite Arena',W/2,150);
  c.font='500 24px '+F;c.fillStyle='#5a6e65';c.fillText('HSTU · Faculty of Agriculture study platform',W/2,190);
  c.font='700 78px '+S;c.fillStyle='#0a4a37';c.fillText('Certificate of Achievement',W/2,330);
  c.fillStyle='#d9a21e';c.fillRect(W/2-150,360,300,5);
@@ -130,7 +130,7 @@ function drawCert(cv,name,b,dt,serial){
  c.font='700 58px '+F;c.fillStyle='#0a4a37';c.fillText(b.title,W/2,850);
  c.font='500 32px '+F;c.fillStyle='#4b5b53';c.fillText(b.descr,W/2,905);
  c.font='500 26px '+F;c.fillStyle='#5a6e65';c.textAlign='left';c.fillText('Date: '+dt,140,985);c.textAlign='right';c.fillText('Certificate ID: '+serial,W-140,985);
- c.textAlign='center';c.font='italic 22px '+F;c.fillStyle='#8a968f';c.fillText('Study achievement certificate from AGRi ELITE NOTES. Not an official university document.',W/2,1030)}
+ c.textAlign='center';c.font='italic 22px '+F;c.fillStyle='#8a968f';c.fillText('Study achievement certificate from AGRi Elite Arena. Not an official university document.',W/2,1030)}
 V.ach=async function(){
  $('main').innerHTML='<h2>Badges &amp; certificates</h2><div id="ax"><p class="m">Loading…</p></div>';
  var rs=await sb.rpc('my_stats'),rb=await sb.rpc('my_badges'),nd=need(rb)||need(rs);if(nd){$('ax').innerHTML=nd;return}
@@ -147,7 +147,7 @@ V.ach=async function(){
   $('acert').innerHTML='<div class="card"><b><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg> Certificate · '+esc(b.title)+'</b><p class="m">Your name comes from Profile. Change it there if needed.</p><canvas id="x-cv" aria-label="Certificate preview"></canvas><div class="x-row" style="margin-top:10px"><button class="btn" id="cdl">Download image</button><button class="btn s" id="csh" hidden>Share</button></div></div>';
   var cv=$('x-cv');drawCert(cv,nm,b,dt,serial);
   $('cdl').onclick=function(){cv.toBlob(function(bl){var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='AGRi-Certificate-'+b.key+'.png';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800)},'image/png')};
-  if(navigator.canShare){cv.toBlob(function(bl){try{var f=new File([bl],'AGRi-Certificate-'+b.key+'.png',{type:'image/png'});if(navigator.canShare({files:[f]})){var sh=$('csh');sh.hidden=false;sh.onclick=function(){navigator.share({files:[f],title:'My AGRi ELITE NOTES certificate'}).catch(function(){})}}}catch(e){}},'image/png')}
+  if(navigator.canShare){cv.toBlob(function(bl){try{var f=new File([bl],'AGRi-Certificate-'+b.key+'.png',{type:'image/png'});if(navigator.canShare({files:[f]})){var sh=$('csh');sh.hidden=false;sh.onclick=function(){navigator.share({files:[f],title:'My AGRi Elite Arena certificate'}).catch(function(){})}}}catch(e){}},'image/png')}
   $('acert').scrollIntoView({behavior:'smooth',block:'nearest'})}
 };
 

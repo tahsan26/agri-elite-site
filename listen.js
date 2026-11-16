@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - "Listen" button on opened answers (browser text-to-speech, no server, no cost). */
+/* AGRi Elite Arena - "Listen" button on opened answers (browser text-to-speech, no server, no cost). */
 (function(){
 if(!('speechSynthesis' in window)||window.__agriListen)return;window.__agriListen=1;
 var SS=window.speechSynthesis,cur=null,rate=1;

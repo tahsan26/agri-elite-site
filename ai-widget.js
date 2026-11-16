@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - floating AI study assistant (works without login). Plain JS, no build step. */
+/* AGRi Elite Arena - floating AI study assistant (works without login). Plain JS, no build step. */
 (function(){
 if(window.__agriAi)return;window.__agriAi=1;
 var script=document.currentScript;var SC=(script&&script.getAttribute('data-course'))||'';
