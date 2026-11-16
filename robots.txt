@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /admin/
+Sitemap: https://agri-elite-arena.netlify.app/sitemap.xml

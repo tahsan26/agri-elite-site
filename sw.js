@@ -1,0 +1,9 @@
+const V='agri-v27',CORE=['/','/index.html','/agf101.html','/ssc101.html','/soc101.html','/manifest.webmanifest','/icons/icon-192.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
+self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||new URL(r.url).origin!==location.origin||/^\/(admin|config\.js)/.test(new URL(r.url).pathname))return;
+e.respondWith(fetch(r).then(res=>{if(res.ok&&!/\.pdf$/.test(r.url)){const c=res.clone();caches.open(V).then(x=>x.put(r,c))}return res}).catch(()=>caches.match(r).then(m=>m||caches.match('/index.html'))))});
+
+self.addEventListener('push',e=>{e.waitUntil((async()=>{let t='AGRi ELITE NOTES',b='You have a new update.',u='/portal.html';try{const cfg=await (await fetch('/config.js',{cache:'no-store'})).text();const url=/url:"([^"]+)"/.exec(cfg)[1],key=/key:"([^"]+)"/.exec(cfg)[1];const r=await fetch(url+'/rest/v1/push_msgs?select=title,body,url&order=id.desc&limit=1',{headers:{apikey:key,Authorization:'Bearer '+key},cache:'no-store'});const j=await r.json();if(j&&j[0]){t=j[0].title||t;b=j[0].body||b;u=j[0].url||u}}catch(x){}
+await self.registration.showNotification(t,{body:b,icon:'/icons/icon-192.png',badge:'/icons/icon-192.png',tag:'agri-push',renotify:true,data:{u}})})())});
+self.addEventListener('notificationclick',e=>{e.notification.close();const u=(e.notification.data&&e.notification.data.u)||'/portal.html';e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l){if(c.url.indexOf(u)>-1&&'focus'in c)return c.focus()}return clients.openWindow(u)}))});

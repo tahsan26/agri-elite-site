@@ -1,0 +1,45 @@
+{
+ "name": "AGRi ELITE NOTES",
+ "short_name": "AGRi Notes",
+ "description": "HSTU Agriculture exam notes: question analysis, answers, self-test and last-night revision.",
+ "start_url": "/agf101.html",
+ "scope": "/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#f7faf8",
+ "theme_color": "#0f6b4f",
+ "lang": "en",
+ "categories": [
+  "education"
+ ],
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Self-test",
+   "url": "/agf101.html#test"
+  },
+  {
+   "name": "AGF 101 notes",
+   "url": "/agf101.html"
+  }
+ ]
+}

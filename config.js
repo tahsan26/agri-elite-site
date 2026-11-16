@@ -1,0 +1,1 @@
+window.AGRI_CFG={url:"https://ofbafhxntyvpegzfsbsw.supabase.co",key:"sb_publishable_INpQk33UyREoc9eHlQyd-Q_Q8R3M22X",bucket:"notes-files",vapid:"BL6uivvHALjMPUvkHirO4Y_hZV9LOqg6-UKcut_zGlofncOHDj0hCiolsmjM2JY9MPIwwROI4OpWxCDfxqB5M58"};
