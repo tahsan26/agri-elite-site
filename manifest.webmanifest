@@ -1,8 +1,8 @@
 {
  "name": "AGRi Elite Arena",
- "short_name": "AGRi Notes",
+ "short_name": "AGRi Arena",
  "description": "HSTU Agriculture exam notes: question analysis, answers, self-test and last-night revision.",
- "start_url": "/agf101.html",
+ "start_url": "/index.html?source=pwa",
  "scope": "/",
  "display": "standalone",
  "orientation": "portrait",
@@ -34,12 +34,21 @@
  ],
  "shortcuts": [
   {
-   "name": "Self-test",
-   "url": "/agf101.html#test"
+   "name": "Student Portal",
+   "url": "/portal.html"
   },
   {
    "name": "AGF 101 notes",
    "url": "/agf101.html"
+  },
+  {
+   "name": "Self-test",
+   "url": "/agf101.html#test"
+  },
+  {
+   "name": "Library",
+   "url": "/library.html"
   }
- ]
+ ],
+ "id": "/"
 }
