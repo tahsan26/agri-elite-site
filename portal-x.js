@@ -150,6 +150,76 @@ V.ach=async function(){
   if(navigator.canShare){cv.toBlob(function(bl){try{var f=new File([bl],'AGRi-Certificate-'+b.key+'.png',{type:'image/png'});if(navigator.canShare({files:[f]})){var sh=$('csh');sh.hidden=false;sh.onclick=function(){navigator.share({files:[f],title:'My AGRi ELITE NOTES certificate'}).catch(function(){})}}}catch(e){}},'image/png')}
   $('acert').scrollIntoView({behavior:'smooth',block:'nearest'})}
 };
+
+/* ───────────── extras: auto study plan, AI flashcards, weekly goal ───────────── */
+function lsg(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function mk(html,id){var d=document.createElement('div');d.className='card';d.id=id;d.innerHTML=html;return d}
+
+/* 1. auto study plan -> writes normal planner tasks */
+function planCard(){
+ var m=$('main'),tf=$('tf');if(!tf||$('x-plan'))return;var anchor=tf.closest('.card');
+ var c=mk('<b>⚡ Make my study plan</b><p class="m" style="margin:4px 0 10px">Give your exam date and topics. It spreads them over the days left and adds them to your tasks below.</p><div class="x-row"><input id="xp-n" class="x-grow" placeholder="Exam name, e.g. AGF 101 Final" maxlength="40"><input id="xp-d" type="date" style="max-width:170px"></div><textarea id="xp-t" rows="5" placeholder="Topics, one per line (or separated by commas)" style="width:100%;margin-top:8px"></textarea><div class="x-row" style="margin-top:8px"><button class="btn" id="xp-go">Create plan</button><span class="m" id="xp-m"></span></div>','x-plan');
+ m.insertBefore(c,anchor);
+ var dt=new Date();dt.setDate(dt.getDate()+1);$('xp-d').min=ymd(dt);
+ $('xp-go').onclick=async function(){
+  var name=$('xp-n').value.trim()||'Exam',ds=$('xp-d').value,tp=$('xp-t').value.split(/[\n,;]+/).map(function(x){return x.trim()}).filter(Boolean).slice(0,120),out=$('xp-m');
+  if(!ds){out.textContent='Choose the exam date.';return}if(!tp.length){out.textContent='Add at least one topic.';return}
+  var t0=new Date();t0.setHours(0,0,0,0);var ex=new Date(ds+'T00:00:00'),n=Math.round((ex-t0)/864e5);
+  if(n<1){out.textContent='The exam date must be in the future.';return}
+  var sd=Math.max(1,Math.min(n-1,45)),first=new Date(ex);first.setDate(ex.getDate()-(sd+1));if(first<t0)first=t0;
+  var rows=[],per={},i;for(i=0;i<tp.length;i++){var k=Math.min(sd-1,Math.floor(i*sd/tp.length));(per[k]=per[k]||[]).push(tp[i])}
+  for(i=0;i<sd;i++){if(!per[i])continue;var d=new Date(first);d.setDate(first.getDate()+i);rows.push({user_id:X.st().U.id,title:'Study: '+per[i].join(', '),subject:name.slice(0,40),due_date:ymd(d)})}
+  var rv=new Date(ex);rv.setDate(ex.getDate()-1);if(n>=2)rows.push({user_id:X.st().U.id,title:'Full revision + one mock exam',subject:name.slice(0,40),due_date:ymd(rv)});
+  rows.push({user_id:X.st().U.id,title:'Exam day: quick look at key points, then rest',subject:name.slice(0,40),due_date:ds});
+  this.disabled=true;var r=await sb.from('study_tasks').insert(rows);this.disabled=false;
+  if(r.error){out.textContent=r.error.message;return}
+  out.textContent='Done: '+rows.length+' tasks added.';X.go('plan')}
+}
+
+/* 2. AI flashcards from the student's own notes (saved on this device) */
+function parseCards(t){t=String(t||'');var a=t.indexOf('['),b=t.lastIndexOf(']'),arr=null;
+ if(a>-1&&b>a){try{arr=JSON.parse(t.slice(a,b+1))}catch(e){}}
+ if(!arr){arr=[];(t.match(/\{[^{}]*\}/g)||[]).forEach(function(s){try{arr.push(JSON.parse(s))}catch(e){}})}
+ return arr.filter(function(c){return c&&c.f&&c.b}).map(function(c){return{f:String(c.f).slice(0,300),b:String(c.b).slice(0,600)}})}
+function cardsCard(){
+ var m=$('main'),f=X.feat?X.feat():{};if($('x-mc')||!$('fb'))return;
+ var c=mk('','x-mc');m.insertBefore(c,$('fb'));
+ var deck=lsg('agri-mycards',[]),i=0,back=false;
+ function draw(){
+  var gen=f.ai?'<details'+(deck.length?'':' open')+'><summary><b>✨ My cards (AI)</b> <span class="m">'+deck.length+' saved on this device</span></summary><textarea id="xc-t" rows="5" data-voice placeholder="Paste your notes here (up to 3000 characters)" maxlength="3000" style="width:100%;margin-top:8px"></textarea><div class="x-row" style="margin-top:8px"><select id="xc-n" style="max-width:110px"><option>8</option><option selected>12</option><option>16</option></select><button class="btn" id="xc-go">Make cards</button><span class="m" id="xc-m"></span></div></details>':'';
+  var rev='';if(deck.length){var d=deck[i];rev='<p class="m" style="margin:10px 0 4px">My card '+(i+1)+' / '+deck.length+'</p><div class="fc" id="xc-c">'+esc(back?d.b:d.f)+'</div><p class="m" style="text-align:center">Tap to flip</p><div class="x-row"><button class="btn s" id="xc-p">←</button><button class="btn s" id="xc-x">Delete card</button><button class="btn s" id="xc-r">Shuffle</button><button class="btn s" id="xc-nx">→</button></div>'}
+  c.innerHTML=gen+rev;if(!gen&&!rev)c.style.display='none'}
+ draw();
+ c.onclick=async function(e){var t=e.target;
+  if(t.id=='xc-c'){back=!back;draw()}
+  else if(t.id=='xc-nx'){i=(i+1)%deck.length;back=false;draw()}
+  else if(t.id=='xc-p'){i=(i-1+deck.length)%deck.length;back=false;draw()}
+  else if(t.id=='xc-r'){deck=shuffle(deck);lss('agri-mycards',deck);i=0;back=false;draw()}
+  else if(t.id=='xc-x'){deck.splice(i,1);lss('agri-mycards',deck);i=Math.max(0,Math.min(i,deck.length-1));back=false;draw()}
+  else if(t.id=='xc-go'){
+   var txt=$('xc-t').value.trim(),n=$('xc-n').value,o=$('xc-m');if(txt.length<80){o.textContent='Paste a longer note first.';return}
+   t.disabled=true;o.textContent='Making cards…';
+   var r=await aiBig('Make exactly '+n+' study flashcards from the notes below. Reply with ONLY a JSON array like [{"f":"question or term","b":"short clear answer"}]. Keep each answer under 40 words. Use the same language as the notes.\n\nNOTES:\n'+txt,'',Math.min(3000,150*n+500));
+   t.disabled=false;var cs=r&&r.ok?parseCards(r.answer):[];
+   if(!cs.length){o.textContent=(r&&r.error)||'Could not make cards. Try a shorter note.';return}
+   deck=cs.concat(deck).slice(0,200);lss('agri-mycards',deck);i=0;back=false;draw()}}
+}
+
+/* 3. weekly study goal on the dashboard */
+async function goalCard(){
+ var m=$('main');if(!m||$('x-goal'))return;var c=mk('','x-goal');var a=$('x-dash');m.insertBefore(c,a?a.nextSibling:(m.children[1]||null));
+ var goal=lsg('agri-goal',120),now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-dow);
+ var mins=0;try{var r=await sb.from('study_sessions').select('minutes,created_at').gte('created_at',mon.toISOString());(r.data||[]).forEach(function(x){mins+=x.minutes||0});
+  lsg('agri-ss',[]).forEach(function(x){if(x.created_at&&new Date(x.created_at)>=mon)mins+=x.minutes||0})}catch(e){}
+ function draw(){var p=Math.min(100,Math.round(mins*100/goal));
+  c.innerHTML='<div class="row"><b>🎯 This week\'s study goal</b><span class="m">'+mins+' / '+goal+' min</span></div><div class="x-pg" style="height:10px"><i style="width:'+p+'%"></i></div><div class="x-row" style="margin-top:8px"><span class="m x-grow">'+(p>=100?'Goal reached. Great work!':'Use the Focus timer to add minutes.')+'</span><select id="xg-s" style="max-width:130px">'+[60,120,180,300,600].map(function(g){return'<option value="'+g+'"'+(g==goal?' selected':'')+'>'+g+' min</option>'}).join('')+'</select></div>';
+  $('xg-s').onchange=function(){goal=+this.value;lss('agri-goal',goal);draw()}}
+ draw()}
+
+window.AgriViewExtra=async function(v){
+ try{if(v=='plan')planCard();else if(v=='cards')cardsCard();else if(v=='dash')await goalCard()}catch(e){console.error(e)}};
 /* quick shortcuts on the dashboard */
 window.AgriDashExtra=function(){
  var m=$('main');if(!m||m.querySelector('#x-dash'))return;var f=X.feat?X.feat():{};

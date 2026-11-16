@@ -57,7 +57,7 @@ async function boot(){await settings();
  $('nav').innerHTML=items.map(function(x){return'<a data-v="'+x[0]+'" class="'+(x[0]==view?'on':'')+'">'+x[1]+(x[0]=='dash'&&un?' ('+un+')':'')+'</a>'}).join('')+'<a id="so">Sign out</a>';
  $('nav').onclick=function(e){var a=e.target.closest('a');if(!a)return;if(a.id=='so')sb.auth.signOut().then(function(){U=null;authView('login')});else go(a.dataset.v)};
  go(view)}
-async function go(v){view=v;clearInterval(timer);clearInterval(cdIv);document.title='AGRi Student Portal';document.querySelectorAll('#nav a').forEach(function(a){a.classList.toggle('on',a.dataset.v==v)});$('main').innerHTML='<p class="m">Loading…</p>';$('main').onclick=null;try{await V[v]();if(v=='dash'&&window.AgriDashExtra)window.AgriDashExtra()}catch(e){$('main').innerHTML=msg('Error: '+(e.message||e))}}
+async function go(v){view=v;clearInterval(timer);clearInterval(cdIv);document.title='AGRi Student Portal';document.querySelectorAll('#nav a').forEach(function(a){a.classList.toggle('on',a.dataset.v==v)});$('main').innerHTML='<p class="m">Loading…</p>';$('main').onclick=null;try{await V[v]();if(v=='dash'&&window.AgriDashExtra)window.AgriDashExtra();if(window.AgriViewExtra)await window.AgriViewExtra(v)}catch(e){$('main').innerHTML=msg('Error: '+(e.message||e))}}
 var V={};
 try{if(window.AgriPortalExt)window.AgriPortalExt({sb:sb,V:V,$:$,esc:esc,msg:msg,C:C,go:go,feat:function(){return feat},st:function(){return{U:U,P:P,courses:courses}}})}catch(e){console.error(e)}
 /* DASHBOARD */
