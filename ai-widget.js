@@ -23,7 +23,7 @@ document.head.appendChild(css);
 var b=document.createElement('button');b.id='aiw-b';b.type='button';b.setAttribute('aria-label','Open AI study assistant');b.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.1A8 8 0 1 1 21 12z"/></svg><span>Ask AI</span>';
 var p=document.createElement('div');p.id='aiw-p';p.setAttribute('role','dialog');p.setAttribute('aria-label','AI study assistant');
 p.innerHTML='<div id="aiw-h"><b>AI Study Assistant<small id="aiw-c"></small></b><button id="aiw-x" type="button" aria-label="Close">×</button></div><div id="aiw-m" aria-live="polite"></div><form id="aiw-f"><input id="aiw-i" maxlength="1000" placeholder="Ask a study question (বাংলা / English)" required autocomplete="off"><button id="aiw-s">Send</button></form><div id="aiw-t">Answers may contain mistakes; check important facts in your notes. Free: a few questions per day (more if you sign in to the student portal).</div>';
-document.body.appendChild(b);document.body.appendChild(p);
+document.body.appendChild(b);document.body.appendChild(p);if(!window.__agriVoice){var vs=document.createElement('script');vs.src='voice.js';vs.defer=true;document.head.appendChild(vs)}
 var M=p.querySelector('#aiw-m'),I=p.querySelector('#aiw-i'),S=p.querySelector('#aiw-s'),H=[];
 function course(){return window.AGRI_AI_COURSE||SC||''}
 function add(cls,text){var d=document.createElement('div');d.className=cls;d.textContent=text;M.appendChild(d);M.scrollTop=M.scrollHeight;return d}
