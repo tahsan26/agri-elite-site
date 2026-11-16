@@ -1,4 +1,4 @@
-/* AGRi ELITE NOTES - voice typing (🎤) for question boxes. Plain JS, no build step.
+/* AGRi ELITE NOTES - voice typing (mic) for question boxes. Plain JS, no build step.
    Uses the browser's built-in speech recognition (Chrome / Edge / Android / Safari). Hidden where unsupported. */
 (function(){
 if(window.__agriVoice)return;window.__agriVoice=1;
@@ -7,7 +7,7 @@ var SEL='#aiw-i,#aiq,input[data-voice],textarea[data-voice]';
 var css=document.createElement('style');css.textContent=
 '.vwrap{display:inline-flex;gap:4px;align-items:center;flex:none}'+
 '.vmic,.vlang{border:1px solid rgba(15,107,79,.35);background:#fff;color:#0f6b4f;cursor:pointer;font:700 13px/1 system-ui,sans-serif;border-radius:999px;height:36px;min-width:36px;padding:0 9px;display:inline-flex;align-items:center;justify-content:center;flex:none}'+
-'.vmic{font-size:17px;width:36px;padding:0}.vmic.on{background:#d93025;border-color:#d93025;color:#fff;animation:vpulse 1.1s infinite}'+
+'.vmic{font-size:17px;width:36px;padding:0;background:linear-gradient(180deg,#fff,#eef7f3)}.vmic svg{display:block}.vmic.on{background:#d93025;border-color:#d93025;color:#fff;animation:vpulse 1.1s infinite}'+
 '.vlang{font-size:12px}.vmic:focus-visible,.vlang:focus-visible{outline:3px solid #ffd54a;outline-offset:2px}'+
 '@keyframes vpulse{0%{box-shadow:0 0 0 0 rgba(217,48,37,.5)}100%{box-shadow:0 0 0 12px rgba(217,48,37,0)}}'+
 '@media(prefers-reduced-motion:reduce){.vmic.on{animation:none}}'+
@@ -24,7 +24,7 @@ function attach(inp){
  if(!inp||inp.dataset.vm)return;inp.dataset.vm='1';
  var w=document.createElement('span');w.className='vwrap';
  var lb=document.createElement('button');lb.type='button';lb.className='vlang';lb.title='Voice language';
- var mb=document.createElement('button');mb.type='button';mb.className='vmic';mb.textContent='🎤';mb.setAttribute('aria-label','Voice typing');mb.title='Voice typing';
+ var mb=document.createElement('button');mb.type='button';mb.className='vmic';mb.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';mb.setAttribute('aria-label','Voice typing');mb.title='Voice typing';
  function lt(){lb.textContent=lang()==='bn-BD'?'বাং':'EN';lb.setAttribute('aria-label','Voice language: '+(lang()==='bn-BD'?'Bangla':'English')+' (tap to change)')}lt();
  lb.onclick=function(e){e.preventDefault();setLang(lang()==='bn-BD'?'en-US':'bn-BD');lt();toast(lang()==='bn-BD'?'ভয়েস ভাষা: বাংলা':'Voice language: English')};
  mb.onclick=function(e){e.preventDefault();
