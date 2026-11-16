@@ -13,8 +13,8 @@ function save(){rec(window.scrollY||0);var tm;window.addEventListener('scroll',f
 function chip(){if(!home)return;try{var l=JSON.parse(localStorage.getItem('agri-lastpage')||'null'),p=JSON.parse(localStorage.getItem('agri-lastpdf')||'null');
  var okL=l&&l.u&&Date.now()-l.ts<30*864e5,okP=p&&p.url&&Date.now()-p.ts<30*864e5;if((!okL&&!okP)||d.getElementById('ux-c'))return;
  var usePdf=okP&&(!okL||p.ts>l.ts),a=d.createElement('a');a.id='ux-c';a.className='ux-c';
- if(usePdf){a.href=p.url;a.innerHTML='<span>\uD83D\uDCC4</span><span>Continue reading PDF<small></small></span><b>Open →</b>';a.querySelector('small').textContent=(p.title||'PDF')+' · page '+(p.page||1);a.onclick=function(e){if(window.PDFReader){e.preventDefault();PDFReader.open(p.url,p.title,p.dl,p.page)}}}
- else{a.href=l.u+'?resume=1';a.innerHTML='<span>▶</span><span>Continue where you left off<small></small></span><b>Open →</b>';a.querySelector('small').textContent=l.t}
- var cd=d.getElementById('agri-cd'),hero=d.querySelector('.hero .wrap');if(hero)hero.insertBefore(a,hero.firstChild);else if(cd)cd.parentNode.insertBefore(a,cd.nextSibling)}catch(e){}}
+ if(usePdf){a.href=p.url;a.innerHTML='<span>\uD83D\uDCC4</span><span>Continue reading where you stopped<small></small></span><b>Resume →</b>';a.querySelector('small').textContent='Last PDF: '+(p.title||'PDF')+' · page '+(p.page||1)+'. Tap to open at the same page.';a.onclick=function(e){if(window.PDFReader){e.preventDefault();PDFReader.open(p.url,p.title,p.dl,p.page)}}}
+ else{a.href=l.u+'?resume=1';a.innerHTML='<span>▶</span><span>Continue where you left off<small></small></span><b>Resume →</b>';a.querySelector('small').textContent='Last page: '+l.t+'. Tap to open at the same spot.'}
+ var cd=d.getElementById('agri-cd');if(cd){cd.style.flexWrap='wrap';a.style.cssText+=';flex:0 0 100%;max-width:560px;margin-top:12px;box-sizing:border-box';cd.appendChild(a)}else{var hero=d.querySelector('.hero');if(hero)hero.parentNode.insertBefore(a,hero)}}catch(e){}}
 function init(){add();upd();save();chip();window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd)}
 if(d.body)init();else d.addEventListener('DOMContentLoaded',init)})();
