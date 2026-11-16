@@ -1,4 +1,4 @@
-const V='agri-v43',CORE=['/','/index.html','/agf101.html','/ssc101.html','/soc101.html','/manifest.webmanifest','/icons/icon-192.png'];
+const V='agri-v44',CORE=['/','/index.html','/agf101.html','/ssc101.html','/soc101.html','/manifest.webmanifest','/icons/icon-192.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||new URL(r.url).origin!==location.origin||/^\/(admin|config\.js)/.test(new URL(r.url).pathname))return;
