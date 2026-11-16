@@ -7,9 +7,14 @@ var bar=d.createElement('div');bar.id='ux-pg';var up=d.createElement('button');u
 function add(){d.body.appendChild(bar);d.body.appendChild(up)}
 function upd(){var h=H.scrollHeight-H.clientHeight,y=window.scrollY||H.scrollTop;bar.style.width=(h>0?Math.min(100,y*100/h):0)+'%';up.classList.toggle('on',y>700)}
 up.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
-function save(){try{if(!home&&/^(agf101|ssc101|soc101|course|library)\.html$/.test(path))localStorage.setItem('agri-lastpage',JSON.stringify({u:path,t:(d.title||path).replace(/\s*[·|\-–].*$/,'').slice(0,50),ts:Date.now()}))}catch(e){}}
-function chip(){if(!home)return;try{var l=JSON.parse(localStorage.getItem('agri-lastpage')||'null');if(!l||!l.u||Date.now()-l.ts>30*864e5||d.getElementById('ux-c'))return;
- var a=d.createElement('a');a.id='ux-c';a.className='ux-c';a.href=l.u;a.innerHTML='<span>▶</span><span>Continue where you left off<small></small></span><b>Open →</b>';a.querySelector('small').textContent=l.t;
+function rec(y){try{if(!home&&/^(agf101|ssc101|soc101|course|library)\.html$/.test(path))localStorage.setItem('agri-lastpage',JSON.stringify({u:path,t:(d.title||path).replace(/\s*[·|\-–].*$/,'').slice(0,50),ts:Date.now(),y:Math.round(y||0)}))}catch(e){}}
+function save(){rec(window.scrollY||0);var tm;window.addEventListener('scroll',function(){clearTimeout(tm);tm=setTimeout(function(){rec(window.scrollY)},350)},{passive:true});
+ try{if(!home&&/[?&]resume=1/.test(location.search)){var l=JSON.parse(localStorage.getItem('agri-lastpage')||'null');if(l&&l.u===path&&l.y>150){var go=function(){window.scrollTo(0,l.y)};setTimeout(go,500);setTimeout(go,1400);setTimeout(go,2600)}}}catch(e){}}
+function chip(){if(!home)return;try{var l=JSON.parse(localStorage.getItem('agri-lastpage')||'null'),p=JSON.parse(localStorage.getItem('agri-lastpdf')||'null');
+ var okL=l&&l.u&&Date.now()-l.ts<30*864e5,okP=p&&p.url&&Date.now()-p.ts<30*864e5;if((!okL&&!okP)||d.getElementById('ux-c'))return;
+ var usePdf=okP&&(!okL||p.ts>l.ts),a=d.createElement('a');a.id='ux-c';a.className='ux-c';
+ if(usePdf){a.href=p.url;a.innerHTML='<span>\uD83D\uDCC4</span><span>Continue reading PDF<small></small></span><b>Open →</b>';a.querySelector('small').textContent=(p.title||'PDF')+' · page '+(p.page||1);a.onclick=function(e){if(window.PDFReader){e.preventDefault();PDFReader.open(p.url,p.title,p.dl,p.page)}}}
+ else{a.href=l.u+'?resume=1';a.innerHTML='<span>▶</span><span>Continue where you left off<small></small></span><b>Open →</b>';a.querySelector('small').textContent=l.t}
  var cd=d.getElementById('agri-cd'),hero=d.querySelector('.hero .wrap');if(hero)hero.insertBefore(a,hero.firstChild);else if(cd)cd.parentNode.insertBefore(a,cd.nextSibling)}catch(e){}}
 function init(){add();upd();save();chip();window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd)}
 if(d.body)init();else d.addEventListener('DOMContentLoaded',init)})();
