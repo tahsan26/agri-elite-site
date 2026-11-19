@@ -9,7 +9,7 @@ h1{font-size:26px;margin:10px 0}a{color:var(--g)}input,select,textarea{width:100
 <div class="row"><input id="q" placeholder="Search notes…" aria-label="Search"><select id="c" aria-label="Course"><option value="">All courses</option></select></div>
 <h2>Notes</h2><div id="n"><p class="m">Loading…</p></div><h2 id="pdfs">PDF notes · read or download</h2><div id="f"><p class="m">Loading…</p></div>
 <h2>Send feedback or report an error</h2><form id="fb"><div class="row"><select id="fk"><option value="feedback">Feedback</option><option value="suggestion">Suggest a topic</option><option value="error_report">Report incorrect information</option></select><input id="fc" placeholder="Contact (optional)" maxlength="120"></div><br><textarea id="fm" rows="4" placeholder="Your message" maxlength="2000" required></textarea><br><br><button>Send</button> <span id="fs"></span></form></div>
-<script src="config.js"></script><script>
+<script src="config.js"></script><script src="site-ui.js" defer></script><script>
 (function(){var C=window.AGRI_CFG,H={apikey:C.key,Authorization:'Bearer '+C.key},$=function(i){return document.getElementById(i)};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function get(p){return fetch(C.url+'/rest/v1/'+p,{headers:H}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}

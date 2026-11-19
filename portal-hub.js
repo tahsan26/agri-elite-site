@@ -46,7 +46,7 @@ window.AgriPortalExt=function(X){
  function pdfRow(x){return'<div class="h-pdf"><div class="ic">PDF</div><div class="t"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div><a class="r" href="'+x[2]+'" target="_blank" rel="noopener">👁 Read</a><a class="d" href="'+x[2]+'" download>⬇</a></div>'}
 
  V.hub=async function(){
-  document.title='Study Hub · AGRi Student Portal';
+  document.title='Study Hub · AGRi Student Portal';try{localStorage.setItem('agri-hub-seen','1')}catch(e){}
   var tab=(V.hub.tab||'all'),vids=[];try{vids=await media()}catch(e){}
   var study=vids.filter(function(v){return v.c=='study'}),other=vids.filter(function(v){return v.c!='study'});
   var notes='<div class="card"><div class="x-row" style="justify-content:space-between"><b>📘 Course notes</b><span class="m">ক্লিক করলেই নোট খুলবে</span></div>'+heroCard()+
@@ -65,6 +65,18 @@ window.AgriPortalExt=function(X){
   var l=$('main').querySelector('[data-hg]');if(l)l.onclick=function(e){e.preventDefault();X.go(l.dataset.hg)};
  };
 
+
+ /* first steps checklist for new students (hidden once all done or dismissed) */
+ async function onboard(m,after){try{if(localStorage.getItem('agri-onb-x'))return}catch(e){}
+  var st=X.st?X.st():{};var r=await Promise.all([sb.from('quiz_attempts').select('id',{count:'exact',head:true}),sb.from('study_sessions').select('id',{count:'exact',head:true}),sb.from('bookmarks').select('note_id',{count:'exact',head:true})]).catch(function(){return[{},{},{}]});
+  var hub=false;try{hub=!!localStorage.getItem('agri-hub-seen')}catch(e){}
+  var S=[['📚 Study Hub খুলে নোট/ভিডিও দেখো',hub,'hub'],['📝 প্রথম কুইজ দাও',(r[0].count||0)>0,'exams'],['⏱ Focus timer দিয়ে ২৫ মিনিট পড়ো',(r[1].count||0)>0,'focus'],['🔖 একটা নোট সেভ করো',(r[2].count||0)>0,'notes']];
+  var n=S.filter(function(x){return x[1]}).length;if(n==S.length)return;
+  var c=document.createElement('div');c.className='card';c.id='h-onb';
+  c.innerHTML='<div class="x-row" style="justify-content:space-between"><b>🚀 শুরু করার ৪টি ধাপ</b><span class="m">'+n+'/'+S.length+' শেষ · <a href="#" data-onx style="color:var(--mute)">লুকাও</a></span></div><div class="x-pg" style="margin:8px 0 10px"><i style="width:'+Math.round(n/S.length*100)+'%"></i></div>'+
+   S.map(function(x){return'<a href="#" data-ong="'+x[2]+'" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;margin:6px 0;text-decoration:none;color:var(--fg);'+(x[1]?'opacity:.6':'')+'"><span style="flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;'+(x[1]?'background:var(--g);color:#fff">✓':'border:2px solid var(--line)">')+'</span><span style="flex:1;'+(x[1]?'text-decoration:line-through':'')+'">'+x[0]+'</span>'+(x[1]?'':'<span style="color:var(--g);font-weight:700">›</span>')+'</a>'}).join('');
+  c.addEventListener('click',function(e){if(e.target.closest('[data-onx]')){e.preventDefault();try{localStorage.setItem('agri-onb-x','1')}catch(x){}c.remove();return}var g=e.target.closest('[data-ong]');if(g){e.preventDefault();if(V[g.dataset.ong])X.go(g.dataset.ong)}});
+  if(after&&after.parentNode)after.parentNode.insertBefore(c,after.nextSibling)}
  /* dashboard: AGN 101 progress + latest videos */
  var prevDash=window.AgriDashExtra;
  window.AgriDashExtra=function(){
@@ -74,6 +86,7 @@ window.AgriPortalExt=function(X){
   d.innerHTML=heroCard()+'<div class="card" id="h-dv" hidden><div class="x-row" style="justify-content:space-between"><b>🎬 নতুন ভিডিও</b><a href="#" data-hgo="hub" class="m" style="font-weight:700;color:var(--g)">Study Hub-এ সব দেখো ›</a></div><div class="h-dv" style="margin-top:10px"></div></div>';
   d.addEventListener('click',function(e){var a=e.target.closest('[data-hgo]');if(a){e.preventDefault();V.hub.tab='videos';X.go('hub')}});
   m.insertBefore(d,m.children[1]||null);
+  onboard(m,d);
   media().then(function(v){var s=v.filter(function(x){return x.c=='study'}).slice(0,4);if(!s.length)return;var c=$('h-dv');if(!c)return;c.querySelector('.h-dv').innerHTML=s.map(vcard).join('');c.hidden=false}).catch(function(){});
  };
 };
