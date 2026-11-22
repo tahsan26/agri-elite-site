@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HSTU Assignment Cover Page Generator | AGRi Elite Arena</title>
+<meta name="description" content="HSTU assignment cover page generator: type your details, preview the cover, download it as PDF or PNG. Free.">
+<link rel="canonical" href="https://agri-elite-arena.pages.dev/assignment-cover.html">
+<meta name="theme-color" content="#0f6b4f">
+<style>
+:root{--g:#0f6b4f;--g2:#0a4a37;--bg:#f4f8f5;--card:#fff;--ink:#0b2a20;--mut:#5a6e65;--ln:#d5e4db;--gold:#f0a93a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:40px}
+header{background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;padding:14px max(16px,env(safe-area-inset-left)) 18px}
+header .in{max-width:1100px;margin:0 auto}
+header a{color:#cdeede;text-decoration:none;font-size:14px}
+h1{margin:8px 0 2px;font-size:clamp(22px,5vw,32px);line-height:1.2}
+header p{margin:0;color:#d9f3e7;font-size:15px}
+main{max-width:1100px;margin:18px auto;padding:0 max(16px,env(safe-area-inset-left));display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:820px){main{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:16px;box-shadow:0 6px 20px #0a4a3714}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
+input,textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px #0f6b4f22}
+textarea{resize:vertical;min-height:70px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+h2{font-size:16px;margin:18px 0 0;color:var(--g);border-bottom:2px solid var(--ln);padding-bottom:5px}
+h2:first-child{margin-top:0}
+.chk{display:flex;gap:8px;align-items:center;font-weight:500;margin-top:14px}.chk input{width:auto}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+button{font:inherit;font-weight:700;font-size:16px;border:0;border-radius:30px;padding:12px 20px;cursor:pointer}
+.pri{background:var(--g);color:#fff}.sec{background:#e6f3ec;color:var(--g2)}
+button:disabled{opacity:.6}
+.prev{position:sticky;top:10px}
+.prev canvas{width:100%;height:auto;display:block;border-radius:6px;background:#fff;box-shadow:0 8px 30px #0a4a3733;border:1px solid var(--ln)}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0;line-height:1.5}
+footer{max-width:1100px;margin:22px auto 0;padding:0 16px;font-size:12px;color:var(--mut)}
+footer a{color:var(--g)}
+</style></head><body>
+<header><div class="in"><a href="/">&larr; AGRi Elite Arena</a><h1>HSTU Assignment Cover Page</h1><p>তথ্য লেখো, প্রিভিউ দেখো, PDF বা ছবি হিসেবে নামিয়ে নাও। বিনামূল্যে।</p></div></header>
+<main>
+<section class="card" aria-label="Form">
+<h2>Assignment</h2>
+<label for="no">Assignment No.</label><input id="no" maxlength="20" placeholder="যেমন: 01">
+<label for="nm">Name of the Assignment</label><textarea id="nm" maxlength="160" placeholder="Assignment-এর নাম বা বিষয়"></textarea>
+<div class="r2"><div><label for="dp">Date of Performance</label><input id="dp" maxlength="30" placeholder="dd/mm/yyyy"></div>
+<div><label for="ds">Date of Submission</label><input id="ds" maxlength="30" placeholder="dd/mm/yyyy"></div></div>
+<h2>Submitted by</h2>
+<label for="sn">Name</label><input id="sn" maxlength="60">
+<label for="si">Student ID</label><input id="si" maxlength="30">
+<label for="fa">Faculty of</label><input id="fa" maxlength="60" placeholder="যেমন: Agriculture">
+<div class="r2"><div><label for="lv">Level</label><input id="lv" maxlength="6" placeholder="1"></div>
+<div><label for="se">Semester</label><input id="se" maxlength="6" placeholder="1"></div></div>
+<h2>Submitted to</h2>
+<label for="st">নাম ও পদবি (প্রতি লাইনে একটা)</label><textarea id="st" maxlength="240" placeholder="Dr. Name&#10;Professor, Department of ..."></textarea>
+<h2>Department</h2>
+<label for="dep">Department of</label><input id="dep" maxlength="70" placeholder="যেমন: Agronomy">
+<label class="chk"><input type="checkbox" id="mark"> নিচে ছোট করে &ldquo;Made with AGRi Elite Arena&rdquo; লেখা থাকুক</label>
+<div class="btns"><button class="pri" id="bpdf">Download PDF</button><button class="sec" id="bpng">Download PNG</button><button class="sec" id="bprint">Print</button></div>
+</section>
+<section class="prev"><canvas id="cv" width="2480" height="3508" aria-label="Cover preview"></canvas>
+<p class="note">প্রিভিউ আসল কভারের মতোই। ডাউনলোড করা PDF A4 সাইজের, ছাপার জন্য প্রস্তুত। তোমার দেওয়া তথ্য শুধু তোমার ফোন বা কম্পিউটারেই থাকে, আমাদের সার্ভারে জমা হয় না।</p></section>
+</main>
+<footer>*Prepared by <a href="https://www.facebook.com/share/1ZwvZqxh2g/" target="_blank" rel="noopener">Mahfuz R. Shanto</a> · <a href="/">agri-elite-arena.pages.dev</a></footer>
+<script>
+(function(){
+var cv=document.getElementById('cv'),cx=cv.getContext('2d');
+var PW=2480,PH=3508;                       // A4 at 300 dpi
+var TW=2008,TH=Math.round(TW*4511/3000);    // frame: 170 mm wide, centred
+var TX=Math.round((PW-TW)/2),TY=Math.round((PH-TH)/2);
+var K=TW/900;                               // template design units -> page px
+var FONT="'Times New Roman',Tinos,'Liberation Serif','Noto Serif Bengali','Noto Sans Bengali','Hind Siliguri',serif";
+var img=new Image(),ready=false;
+img.onload=function(){ready=true;draw()};img.src='cover-template.png';
+function $(i){return document.getElementById(i)}
+function X(v){return TX+v*K}function Y(v){return TY+v*K}
+function fit(t,size,maxw,style){var s=size;cx.font=style+' '+(s*K)+'px '+FONT;while(cx.measureText(t).width>maxw*K&&s>12){s-=1;cx.font=style+' '+(s*K)+'px '+FONT}return s}
+function put(t,x,y,size,maxw,style,align){t=(t||'').trim();if(!t)return;var s=fit(t,size,maxw,style||'');cx.textAlign=align||'left';cx.fillText(t,X(x),Y(y))}
+function wrap(t,maxw,size,style){var out=[],words=(t||'').replace(/\s+/g,' ').trim().split(' ');if(!words[0])return out;cx.font=style+' '+(size*K)+'px '+FONT;var cur='';words.forEach(function(w){var test=cur?cur+' '+w:w;if(cx.measureText(test).width>maxw*K&&cur){out.push(cur);cur=w}else cur=test});out.push(cur);return out}
+function draw(){
+ cx.fillStyle='#fff';cx.fillRect(0,0,PW,PH);
+ if(ready)cx.drawImage(img,TX,TY,TW,TH);
+ cx.fillStyle='#000';cx.textBaseline='alphabetic';
+ // assignment no
+ put($('no').value,650,108,40,150,'italic bold');
+ // assignment name: two ruled lines
+ var nl=wrap($('nm').value,740,32,'italic');
+ if(nl.length>2){var s=30;while(nl.length>2&&s>18){s-=2;nl=wrap($('nm').value,740,s,'italic')}}
+ nl.slice(0,2).forEach(function(l,i){cx.font='italic '+(36*K)+'px '+FONT;var sz=fit(l,32,740,'italic');cx.textAlign='center';cx.fillText(l,X(443),Y(i?300:245))});
+ // dates
+ put($('dp').value,70,468,30,335,'');
+ put($('ds').value,505,468,30,320,'');
+ // submitted by
+ put($('sn').value,470,611,29,370,'');
+ put($('si').value,470,643,29,370,'');
+ put($('fa').value,470,676,29,370,'');
+ put($('lv').value,394,710,29,40,'');
+ put($('se').value,578,710,29,255,'');
+ // submitted to
+ var tl=($('st').value||'').split(/\n/).map(function(s){return s.trim()}).filter(Boolean).slice(0,4);
+ tl.forEach(function(l,i){put(l,315,846+i*33,29,520,'')});
+ // department
+ put($('dep').value,332,1182,29,500,'bold');
+ if($('mark').checked){cx.fillStyle='#555';cx.textAlign='center';cx.font=(10*K)+'px '+FONT;cx.fillText('Made with AGRi Elite Arena · agri-elite-arena.pages.dev',PW/2,PH-Math.round(TY*0.42));cx.fillStyle='#000'}
+}
+['no','nm','dp','ds','sn','si','fa','lv','se','st','dep','mark'].forEach(function(i){$(i).addEventListener('input',draw)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+function fname(ext){var s=($('nm').value||'assignment').trim().replace(/[^\wঀ-৿]+/g,'_').slice(0,30)||'assignment';return 'Cover_'+s+'.'+ext}
+function save(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+$('bpng').onclick=function(){draw();cv.toBlob(function(b){save(b,fname('png'))},'image/png')};
+function pdfFromJpeg(jpg,w,h){
+ var enc=new TextEncoder(),parts=[],len=0,offs=[];
+ function add(x){var u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length}
+ function obj(n,body){offs[n]=len;add(n+' 0 obj\n');add(body);add('\nendobj\n')}
+ add('%PDF-1.4\n');
+ obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+ obj(2,'<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+ obj(3,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
+ offs[4]=len;add('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+w+' /Height '+h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpg.length+' >>\nstream\n');add(jpg);add('\nendstream\nendobj\n');
+ var c='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+ obj(5,'<< /Length '+c.length+' >>\nstream\n'+c+'\nendstream');
+ var x=len;add('xref\n0 6\n0000000000 65535 f \n');
+ for(var i=1;i<=5;i++)add(('0000000000'+offs[i]).slice(-10)+' 00000 n \n');
+ add('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+x+'\n%%EOF');
+ var out=new Uint8Array(len),o=0;parts.forEach(function(u){out.set(u,o);o+=u.length});return new Blob([out],{type:'application/pdf'})}
+$('bpdf').onclick=function(){draw();
+ var url=cv.toDataURL('image/jpeg',0.95),bin=atob(url.split(',')[1]),u=new Uint8Array(bin.length);
+ for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+ save(pdfFromJpeg(u,cv.width,cv.height),fname('pdf'))};
+$('bprint').onclick=function(){draw();var w=window.open('');if(!w){alert('Print window খুলতে পারেনি। PDF নামিয়ে প্রিন্ট করো।');return}
+ w.document.write('<title>Cover</title><style>@page{size:A4;margin:0}body{margin:0}img{width:210mm;height:297mm;display:block}</style><img src="'+cv.toDataURL('image/png')+'" onload="print()">');w.document.close()};
+draw();
+})();
+</script>
+<script src="config.js"></script><script src="track.js"></script>
+</body></html>
